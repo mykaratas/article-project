@@ -14,7 +14,6 @@
         [Required]
         public string Content { get; set; }
         [DataType(DataType.Date)]
-        public DateTime CreatedDate { get; set; }
         public string FullName { get; set; }
     }
 }

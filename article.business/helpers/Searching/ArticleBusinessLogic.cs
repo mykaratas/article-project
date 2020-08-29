@@ -7,16 +7,16 @@ namespace article.business.helpers.Searching
 {
     public class ArticleBusinessLogic
     {
-        private readonly blogcontext _blogcontext;
+        private readonly articlecontext _articlecontext;
 
-        public ArticleBusinessLogic(blogcontext context)
+        public ArticleBusinessLogic(articlecontext context)
         {
-            _blogcontext = context;
+            _articlecontext = context;
         }
 
-        public IEnumerable<Article> GetArticles(ArticleSearchModel searchModel)
+        public IEnumerable<Article> GetArticles(ArticleSearchModel searchModel, int? limit = 15, int? start = 0)
         {
-            var result = _blogcontext.Articles.AsQueryable();
+            var result = _articlecontext.Articles.AsQueryable();
             if (searchModel != null)
             {
                 if (searchModel.Id != null)
@@ -28,6 +28,7 @@ namespace article.business.helpers.Searching
                 if (!string.IsNullOrEmpty(searchModel.Title))
                     result = result.Where(x => x.Title.Contains(searchModel.Title));
             }
+
             return result.AsEnumerable();
         }
 

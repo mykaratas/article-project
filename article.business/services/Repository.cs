@@ -11,34 +11,38 @@
 
     public class Repository<T> : IRepository<T> where T : CoreEntity
     {
-        protected readonly blogcontext _context;
+        protected readonly articlecontext _context;
         protected DbSet<T> _entities;
-        public Repository(blogcontext context)
+        public Repository(articlecontext context)
         {
             this._context = context;
             this._entities = context.Set<T>();
         }
 
-        public void Add(T entity)
+        public T Add(T entity)
         {
             if (entity == null) throw new ArgumentNullException("entity");
             _entities.Add(entity);
             try
             {
                 _context.SaveChanges();
+                return entity;
             }
             catch
             {
                 RollBack();
+                return null;
             }
         }
-        public virtual void Update(T entity)
+        public T Update(T entity)
         {
             if (entity == null)
                 throw new ArgumentNullException("entity");
 
             _context.Entry(entity).State = EntityState.Modified;
             _context.SaveChanges();
+
+            return entity;
         }
         public void Delete(Guid id)
         {
@@ -89,17 +93,25 @@
             return _entities.Where(exp);
         }
 
-        public List<T> ListAll(int? limit = 15, int? start = 0)
+        public List<T> ListAll(int pageSize = 50, int pageNo = 1)
         {
+            int skip = (pageNo - 1) * pageSize;
+
             List<T> list = _entities.AsEnumerable()
-                .Skip(start ?? 0)
-                .Take(limit ?? 15).ToList();
+                .Skip(skip)
+                .Take(pageSize)
+                .ToList();
             return list;
         }
 
-        // public bool SaveChanges()
-        // {
-        //     return _context.SaveChanges() > 0 ? true : false;
-        // }
+        public int GetTotalCount()
+        {
+            return _entities.Count();
+        }
+
+        public bool SaveChanges()
+        {
+            return _context.SaveChanges() > 0 ? true : false;
+        }
     }
 }

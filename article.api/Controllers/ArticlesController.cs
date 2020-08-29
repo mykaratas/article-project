@@ -8,6 +8,9 @@ namespace article.api.Controllers
     using System;
     using article.data.models;
     using article.business.helpers.Searching;
+    using System.Collections.Generic;
+    using article.api.Response;
+    using article.business.services;
 
     [ApiController]
     [Route("api/[controller]")]
@@ -21,56 +24,76 @@ namespace article.api.Controllers
         }
 
         [HttpGet]
-        public object GetArticles(int limit = 15, int offset = 0)
+        public object GetArticles(int pageSize = 50, int pageNo = 1)
         {
-            return _articleRepository.ListAll(limit, offset).Select(x => new
-            {
-                x.Id,
-                x.FullName
-            });
+            int total = _articleRepository.GetTotalCount();
+
+            var articles = _articleRepository.ListAll(pageSize, pageNo);
+            
+            return Ok(new PagedResult<Article>(articles, pageNo, pageSize, total));
+
         }
 
         [HttpGet("{id}")]
         public object GetArticle(Guid id)
         {
-            return _articleRepository.GetById(id);
+            var article = _articleRepository.GetById(id);
+            if (article == null)
+            {
+                return StatusCode(404, new PagedResult<Article>(article,"kayıt bulunamadı",404));
+            }
+            return Ok(new PagedResult<Article>(article));
+
         }
 
 
         [HttpDelete("{id}")]
         public object DeleteArticle(Guid id)
         {
-            _articleRepository.Delete(id);
-            return Accepted();
+            try
+            {
+                _articleRepository.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            return Ok(new PagedResult<Article>(id));
         }
 
         [HttpPut]
         public IActionResult UpdateArticle([FromBody] Article articleDTO)
         {
-            _articleRepository.Update(articleDTO);
-            return Ok();
+
+            try
+            {
+                var article = _articleRepository.Update(articleDTO);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(404, new PagedResult<Article>(articleDTO.Id, "kayıt bulunamadı", 404));
+
+            }
+
+            return Ok(new PagedResult<Article>(articleDTO, "Veriler Başarılı bir şekilde güncellenmiştir.", 201));
         }
+
 
         [HttpPost]
         public IActionResult AddArticle([FromBody] Article articleDTO)
         {
-            _articleRepository.Add(articleDTO);
-            return Ok();
-        }
-
-
-        [HttpGet("{id}")]
-        public object GetTitle(Guid id)
-        {
-            return _articleRepository.GetById(id);
+            var article = _articleRepository.Add(articleDTO);
+            return Ok(new PagedResult<Article>(article));
         }
 
 
         [HttpGet("search")]
-        public object SearchArticle(string content, string title, string fullName, Guid? id)
+        public object SearchArticle(string content, string title, string fullName, Guid? id, int pageSize = 50, int pageNo = 1)
         {
             ArticleSearchModel articleSearchModel = new ArticleSearchModel(id, content, title, fullName);
-            return _articleRepository.Search(articleSearchModel);
+            var articles = _articleRepository.Search(articleSearchModel, pageSize, pageNo);
+
+            return Ok(new PagedResult<Article>(articles, pageNo, pageSize, _articleRepository.GetSearchCount()));
         }
     }
 }

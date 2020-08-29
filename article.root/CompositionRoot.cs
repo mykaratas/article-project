@@ -13,9 +13,9 @@ namespace article.root
 
         public static void InjectDependencies(IServiceCollection services)
         {
-            services.AddScoped<blogcontext>();
+            services.AddScoped<articlecontext>();
             services.AddScoped(typeof(IArticleRepository), typeof(ArticleService));
-            services.AddDbContext<blogcontext>(options =>
+            services.AddDbContext<articlecontext>(options =>
             options.UseSqlServer("Server=localhost,1433;Initial Catalog=article_local_db;User ID=SA;Password=P@55word;Connection Timeout=30;MultipleActiveResultSets=True", x => x.MigrationsAssembly("article.api")));
         }
     }

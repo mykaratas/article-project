@@ -4,10 +4,12 @@ namespace article.business.repositories
     using System;
     using System.Collections.Generic;
     using data.models;
+    using Microsoft.EntityFrameworkCore;
+
     public interface IRepository<T> where T : CoreEntity
     {
-        void Add(T entity);
-        void Update(T entity);
+        T Add(T entity);
+        T Update(T entity);
         void Delete(Guid id);
 
         void Delete(T item);
@@ -16,7 +18,8 @@ namespace article.business.repositories
 
         T GetById(Guid id);
         IEnumerable<T> GetAll();
-        List<T> ListAll(int? limit = 15, int? start = 0);
+        List<T> ListAll(int pageSize = 50, int pageNo = 1);
+        int GetTotalCount();
         IEnumerable<T> GetDefault(Expression<Func<T, bool>> exp);
 
         int Save();

@@ -7,16 +7,31 @@
     using Microsoft.EntityFrameworkCore;
     using System.Linq;
     using System.Collections;
+    using System.Collections.Generic;
 
     public class ArticleService : Repository<Article>, IArticleRepository
     {
-        public ArticleService(blogcontext context) : base(context) { }
+        private int searchcount { get; set; }
 
-        public IEnumerable Search(ArticleSearchModel searchModel)
+
+        public ArticleService(articlecontext context) : base(context)
         {
+            searchcount = 0;
+        }
+
+        public List<Article> Search(ArticleSearchModel searchModel, int pageSize = 50, int pageNo = 1)
+        {
+            int skip = (pageNo - 1) * pageSize;
             var business = new ArticleBusinessLogic(_context);
             var model = business.GetArticles(searchModel);
-            return model.AsEnumerable();
+            searchcount = model.Count();
+            return model.AsEnumerable().Skip(skip).Take(pageSize).ToList();
         }
+
+        public int GetSearchCount()
+        {
+            return searchcount;
+        }
+
     }
 }
