@@ -71,7 +71,7 @@ namespace article.api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(404, new PagedResult<Article>(articleDTO.Id, "kayıt bulunamadı", 404));
+                return StatusCode(404, new PagedResult<Article>(articleDTO.Id, "kayıt bulunamadı trace:" + ex.Message, 404));
 
             }
 
