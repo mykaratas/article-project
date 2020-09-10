@@ -7,10 +7,26 @@
         public articlecontext(DbContextOptions<articlecontext> options)
         : base(options) { }
         public virtual DbSet<Article> Articles { get; set; }
+        public virtual DbSet<ArticleCategory> ArticleCategories { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
+            modelBuilder.Entity<ArticleCategory>().HasKey(pk => new { pk.ArticleId, pk.CategoryId });
+
+            
+            modelBuilder.Entity<ArticleCategory>()
+                .HasOne(bc => bc.Article)
+                .WithMany(b => b.ArticleCategories)
+                .HasForeignKey(bc => bc.ArticleId);
+            
+            modelBuilder.Entity<ArticleCategory>()
+                .HasOne(bc => bc.Category)
+                .WithMany(c => c.ArticleCategories)
+                .HasForeignKey(bc => bc.CategoryId);
+            
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Article>().HasData(

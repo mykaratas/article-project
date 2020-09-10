@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Linq;
+using System.Linq.Expressions;
 namespace article.business.repositories
 {
     using System;
@@ -25,6 +26,8 @@ namespace article.business.repositories
         int Save();
         void RollBack();
         bool Any(Expression<Func<T, bool>> exp);
+
+        IQueryable<T> GetAllQ();
 
 
 

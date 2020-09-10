@@ -1,4 +1,6 @@
-﻿namespace article.data.models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace article.data.models
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -15,5 +17,7 @@
         public string Content { get; set; }
         [DataType(DataType.Date)]
         public string FullName { get; set; }
+        public ICollection<ArticleCategory> ArticleCategories { get; set; }
+
     }
 }

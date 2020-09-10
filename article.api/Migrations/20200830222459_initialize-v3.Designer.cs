@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using article.data.context;
 
 namespace article.api.Migrations
 {
     [DbContext(typeof(articlecontext))]
-    partial class articlecontextModelSnapshot : ModelSnapshot
+    [Migration("20200830222459_initialize-v3")]
+    partial class initializev3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,6 +25,12 @@ namespace article.api.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("CategoryId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
@@ -42,54 +50,35 @@ namespace article.api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId1");
+
                     b.ToTable("Articles");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c922cf2f-290f-4239-b6f5-d1ba1b4619e5"),
+                            Id = new Guid("c0727ed5-5785-4a3b-9b4e-6b0698720369"),
                             Content = "Article Content 1",
-                            CreatedDate = new DateTime(2020, 9, 1, 1, 13, 27, 485, DateTimeKind.Local).AddTicks(7430),
+                            CreatedDate = new DateTime(2020, 8, 31, 1, 24, 59, 107, DateTimeKind.Local).AddTicks(4560),
                             FullName = "Full Name 1",
                             Title = "Article Title 1"
                         },
                         new
                         {
-                            Id = new Guid("2f229045-c7e8-4a4a-a738-ee0ec910e292"),
+                            Id = new Guid("55da32c4-68b3-4a45-a4cc-ccdbeb6d3996"),
                             Content = "Article Content 2",
-                            CreatedDate = new DateTime(2020, 9, 1, 1, 13, 27, 493, DateTimeKind.Local).AddTicks(4830),
+                            CreatedDate = new DateTime(2020, 8, 31, 1, 24, 59, 114, DateTimeKind.Local).AddTicks(3420),
                             FullName = "Full Name 2",
                             Title = "Article Title 2"
                         },
                         new
                         {
-                            Id = new Guid("fdaa0128-0edc-46ab-951c-d5feab0635d9"),
+                            Id = new Guid("b7eed6ee-9cc2-445b-983c-277c8a540d2f"),
                             Content = "Article Content 3",
-                            CreatedDate = new DateTime(2020, 9, 1, 1, 13, 27, 493, DateTimeKind.Local).AddTicks(4910),
+                            CreatedDate = new DateTime(2020, 8, 31, 1, 24, 59, 114, DateTimeKind.Local).AddTicks(3500),
                             FullName = "Full Name 3",
                             Title = "Article Title 3"
                         });
-                });
-
-            modelBuilder.Entity("article.data.models.ArticleCategory", b =>
-                {
-                    b.Property<Guid>("ArticleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ArticleId", "CategoryId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("ArticleCategories");
                 });
 
             modelBuilder.Entity("article.data.models.Category", b =>
@@ -114,19 +103,11 @@ namespace article.api.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("article.data.models.ArticleCategory", b =>
+            modelBuilder.Entity("article.data.models.Article", b =>
                 {
-                    b.HasOne("article.data.models.Article", "Article")
-                        .WithMany("ArticleCategories")
-                        .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("article.data.models.Category", "Category")
-                        .WithMany("ArticleCategories")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Articles")
+                        .HasForeignKey("CategoryId1");
                 });
 #pragma warning restore 612, 618
         }

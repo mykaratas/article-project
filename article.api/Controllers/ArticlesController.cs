@@ -1,4 +1,7 @@
 ﻿using System.Net.Cache;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+
 namespace article.api.Controllers
 {
 
@@ -17,10 +20,13 @@ namespace article.api.Controllers
     public class ArticlesController : ControllerBase
     {
         private readonly IArticleRepository _articleRepository;
+        
+        private IUnitOfWork _unitOfWork;
 
-        public ArticlesController(IArticleRepository articleRepository)
+        public ArticlesController(IArticleRepository articleRepository,IUnitOfWork unitOfWork)
         {
-            this._articleRepository = articleRepository;
+            _articleRepository = articleRepository;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
@@ -28,8 +34,12 @@ namespace article.api.Controllers
         {
             int total = _articleRepository.GetTotalCount();
 
-            var articles = _articleRepository.ListAll(pageSize, pageNo);
-            
+            var articles = _unitOfWork.Articles.GetAllQ()
+                .Include(b => b.ArticleCategories)
+                    .ThenInclude(a => a.Category)
+                        .ThenInclude(m => m.ArticleCategories)
+                            .ThenInclude(c => c.Article)
+                .ToList();
             return Ok(new PagedResult<Article>(articles, pageNo, pageSize, total));
 
         }
@@ -37,7 +47,12 @@ namespace article.api.Controllers
         [HttpGet("{id}")]
         public object GetArticle(Guid id)
         {
-            var article = _articleRepository.GetById(id);
+            var article = _unitOfWork.Articles.GetAllQ()
+                .Include(b => b.ArticleCategories)
+                    .ThenInclude(a => a.Category)
+                        .ThenInclude(m => m.ArticleCategories)
+                            .ThenInclude(c => c.Article).Where(m => m.Id == id)
+                                .FirstOrDefault();
             if (article == null)
             {
                 return StatusCode(404, new PagedResult<Article>(article,"kayıt bulunamadı",404));
@@ -54,9 +69,9 @@ namespace article.api.Controllers
             {
                 _articleRepository.Delete(id);
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, new PagedResult<Article>(id, "kayıt bulunamadı", 404));
             }
             return Ok(new PagedResult<Article>(id));
         }
@@ -64,14 +79,13 @@ namespace article.api.Controllers
         [HttpPut]
         public IActionResult UpdateArticle([FromBody] Article articleDTO)
         {
-
             try
             {
                 var article = _articleRepository.Update(articleDTO);
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(404, new PagedResult<Article>(articleDTO.Id, "kayıt bulunamadı trace:" + ex.Message, 404));
+                return StatusCode(404, new PagedResult<Article>(articleDTO.Id, "kayıt bulunamadı", 404));
 
             }
 
@@ -82,7 +96,22 @@ namespace article.api.Controllers
         [HttpPost]
         public IActionResult AddArticle([FromBody] Article articleDTO)
         {
-            var article = _articleRepository.Add(articleDTO);
+                        
+            foreach (var articleCategory in articleDTO.ArticleCategories)
+            {
+                var category = _unitOfWork.Categories.GetById(articleCategory.CategoryId);
+                if (category == null)
+                {
+                    return StatusCode(404, "404 not found category");
+                }
+                articleCategory.Category = _unitOfWork.Categories.GetById(articleCategory.CategoryId);
+                articleCategory.Article = articleDTO;
+                articleCategory.ArticleId = articleDTO.Id;
+            }
+            
+            var article = _unitOfWork.Articles.Add(articleDTO);
+            
+         
             return Ok(new PagedResult<Article>(article));
         }
 

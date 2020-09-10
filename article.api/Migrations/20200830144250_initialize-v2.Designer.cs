@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using article.data.context;
 
 namespace article.api.Migrations
 {
     [DbContext(typeof(articlecontext))]
-    partial class articlecontextModelSnapshot : ModelSnapshot
+    [Migration("20200830144250_initialize-v2")]
+    partial class initializev2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,25 +49,25 @@ namespace article.api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c922cf2f-290f-4239-b6f5-d1ba1b4619e5"),
+                            Id = new Guid("2b6880a4-909c-4c66-b091-56a8235d6303"),
                             Content = "Article Content 1",
-                            CreatedDate = new DateTime(2020, 9, 1, 1, 13, 27, 485, DateTimeKind.Local).AddTicks(7430),
+                            CreatedDate = new DateTime(2020, 8, 30, 17, 42, 49, 623, DateTimeKind.Local).AddTicks(8080),
                             FullName = "Full Name 1",
                             Title = "Article Title 1"
                         },
                         new
                         {
-                            Id = new Guid("2f229045-c7e8-4a4a-a738-ee0ec910e292"),
+                            Id = new Guid("b8c2d73a-be05-427c-ac59-fb6867e2d678"),
                             Content = "Article Content 2",
-                            CreatedDate = new DateTime(2020, 9, 1, 1, 13, 27, 493, DateTimeKind.Local).AddTicks(4830),
+                            CreatedDate = new DateTime(2020, 8, 30, 17, 42, 49, 630, DateTimeKind.Local).AddTicks(5780),
                             FullName = "Full Name 2",
                             Title = "Article Title 2"
                         },
                         new
                         {
-                            Id = new Guid("fdaa0128-0edc-46ab-951c-d5feab0635d9"),
+                            Id = new Guid("9ee2dac8-4f31-4a41-b88b-3b708ec458d5"),
                             Content = "Article Content 3",
-                            CreatedDate = new DateTime(2020, 9, 1, 1, 13, 27, 493, DateTimeKind.Local).AddTicks(4910),
+                            CreatedDate = new DateTime(2020, 8, 30, 17, 42, 49, 630, DateTimeKind.Local).AddTicks(5840),
                             FullName = "Full Name 3",
                             Title = "Article Title 3"
                         });

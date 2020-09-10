@@ -21,17 +21,17 @@
 
         public T Add(T entity)
         {
-            if (entity == null) throw new ArgumentNullException("entity");
+            //if (entity == null) throw new ArgumentNullException("entity");
             _entities.Add(entity);
             try
             {
                 _context.SaveChanges();
                 return entity;
             }
-            catch
+            catch(Exception ex)
             {
                 RollBack();
-                return null;
+                throw new ArgumentNullException(ex.Message);
             }
         }
         public T Update(T entity)
@@ -113,5 +113,11 @@
         {
             return _context.SaveChanges() > 0 ? true : false;
         }
+        
+        public IQueryable<T> GetAllQ()
+        {
+            return _context.Set<T>();
+        }
+
     }
 }

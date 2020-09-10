@@ -20,7 +20,6 @@ namespace article.api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
         }
 
         public IConfiguration Configuration { get; }
@@ -29,6 +28,9 @@ namespace article.api
         {
             CompositionRoot.InjectDependencies(services);
             services.AddControllers();
+
+            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using article.data.context;
 
 namespace article.api.Migrations
 {
     [DbContext(typeof(articlecontext))]
-    partial class articlecontextModelSnapshot : ModelSnapshot
+    [Migration("20200829235303_initialize-v1")]
+    partial class initializev1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,25 +49,25 @@ namespace article.api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c922cf2f-290f-4239-b6f5-d1ba1b4619e5"),
+                            Id = new Guid("037db917-1e68-4402-9c98-29e8bde359c6"),
                             Content = "Article Content 1",
-                            CreatedDate = new DateTime(2020, 9, 1, 1, 13, 27, 485, DateTimeKind.Local).AddTicks(7430),
+                            CreatedDate = new DateTime(2020, 8, 30, 2, 53, 2, 635, DateTimeKind.Local).AddTicks(1700),
                             FullName = "Full Name 1",
                             Title = "Article Title 1"
                         },
                         new
                         {
-                            Id = new Guid("2f229045-c7e8-4a4a-a738-ee0ec910e292"),
+                            Id = new Guid("ebcf9c04-2159-4d7b-96c1-e3ea374b0af3"),
                             Content = "Article Content 2",
-                            CreatedDate = new DateTime(2020, 9, 1, 1, 13, 27, 493, DateTimeKind.Local).AddTicks(4830),
+                            CreatedDate = new DateTime(2020, 8, 30, 2, 53, 2, 641, DateTimeKind.Local).AddTicks(9540),
                             FullName = "Full Name 2",
                             Title = "Article Title 2"
                         },
                         new
                         {
-                            Id = new Guid("fdaa0128-0edc-46ab-951c-d5feab0635d9"),
+                            Id = new Guid("e18c6d45-08ea-4376-869b-352df18be1bf"),
                             Content = "Article Content 3",
-                            CreatedDate = new DateTime(2020, 9, 1, 1, 13, 27, 493, DateTimeKind.Local).AddTicks(4910),
+                            CreatedDate = new DateTime(2020, 8, 30, 2, 53, 2, 641, DateTimeKind.Local).AddTicks(9600),
                             FullName = "Full Name 3",
                             Title = "Article Title 3"
                         });
@@ -77,12 +79,6 @@ namespace article.api.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ArticleId", "CategoryId");
