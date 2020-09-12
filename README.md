@@ -46,19 +46,29 @@ POSTMAN COLLECTİON: https://www.getpostman.com/collections/599fa55463618bd68860
 
 
 ## Design Patterns
-### Repository Pattern
-### Dependency Injection Decorator pattern
-### Unit Of Work
-### Strategy Design Patterns
+#### Repository Pattern
+#### Dependency Injection Decorator pattern
+#### Unit Of Work
+#### Strategy Design Patterns
+#### Dependency Injection
 
 ## Kullanılan Teknolojiler
-### Entity Framework
-### Linq
-### MSSQL
-### Dotnet Core
+#### Entity Framework
+#### Linq
+#### MSSQL
+#### Dotnet Core(3.1)
+#### Docker
 
 ## ilerde Tamamlamak İstediğim İşler
-### Unit testler ve gerçek seneryolar ile test yapılması
-### Swagger kurulumu. Servisler testleri için kolay bir arayüz
-### ELK stack. sistemin loglarını elasticsearch üzerinde tutmak ve kibana ile monitör etmek.
-### IdentityServer kurulumu.
+#### Unit testler test ortamının kurulması ve mocha vb node js kütüphaneleri ile gerçek testlerin yapılması.
+#### Swagger Stoplight vb dökümantasyon ortamının kurgulanması mimari kurgulandıktan sonra yapılması daha makul.
+#### Logların Microsoft.Extensions.Logging vb kütüphane ile programlanması ve Sentry(https://docs.sentry.io/platforms/dotnet/guides/aspnetcore/) ile canlıdaki hataların raporlanması.
+#### Authorization ile kurguların uluşturulup programlanması login register singin vb için token yapısı ve servislerin yazılması.
+#### S3 bucket vb ortamlarının programlanması. Amazon Web Service vb kullanılabilir. Burada video hizmeti sunacak ise stream için serverles kullnılabilir.
+
+
+
+
+NOT: Öncelikle bu değerlendirme projesi için çok teşekkür ederim kabul edilsin veya edilmesin güzel şeyler kattı bana verimli oldu benim için. .net tecrübe eksikliğim var farkındayım kendimi geliştirmek için elimden geleni yapmaya hazırım hızlıca adapte olup güzel işler çıkarabilirim. Çalıkan bir kişiliğim var.
+
+
