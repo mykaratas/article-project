@@ -13,7 +13,7 @@ mssql'i docker imajı üzerinden çalıştırıyorum. Bilgisayarınızdaki mssql
 NOT:article.root katmanı üzerinde '~/article.root/CompositionRoot.cs' UseSqlServer metodunun ilk parametresinden değiştirebilirsiniz.
 
 ``` 
-docker run -d -p 1433:1433 --name article_docker_db -e 'ACCEPT_EULA=Y' -e 'MSSQL_SA_PASSWORD=P@55word' microsoft/mssql-server-linux:2017-latest
+docker-compose up -d
 ```
 Uyarı: mevcutta localhost üzerinden 1433 portunu kullanan bir host varsa yukarıda değiştirirseniz çakışma olmayacaktır.
 
